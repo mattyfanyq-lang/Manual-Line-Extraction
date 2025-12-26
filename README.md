@@ -26,7 +26,7 @@ The pipeline consists of 3 stages:
    </p>
 
 3. **Matrix-based transformation**  
-   A conversion matrix is derived to map CRS coordinates into pixel coordinates using an affine transformation. Given a set of corresponding control points in CRS space and image space, a linear system is solved to estimate the transformation parameters, including scale, translation, and axis inversion. Once computed, the same affine transformation matrix is applied uniformly to all traced line geometries, ensuring consistent CRS-to-pixel conversion without per-file recalculation. Most importantly, conversion accuracy can be improved in the future by update this file alone. The transformed line data are then exported as JSON in pixel coordinates for downstream use. 
+   A conversion matrix is derived to map CRS coordinates into pixel coordinates using an affine transformation. Given a set of corresponding control points in CRS space and image space, a linear system is solved to estimate the transformation parameters, including scale, translation, and axis inversion. Once computed, the same affine transformation matrix is applied uniformly to all traced line geometries, ensuring consistent CRS-to-pixel conversion without per-file recalculation. Most importantly, conversion accuracy can be improved in the future by updating this file alone. The transformed line data are then exported as JSON in pixel coordinates for downstream use. 
 
 ---
 
