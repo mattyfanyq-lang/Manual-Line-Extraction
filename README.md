@@ -14,11 +14,16 @@ The pipeline consists of 3 stages:
 
 1. **Manual tracing in QGIS**  
    MRT lines are traced by hand over a schematic background image. The line data are represented as CRS coordinates and exported in GeoJSON format.  
-   ![QGIS hand tracing](QGIS_trace.png)
+     <p align="center">
+     <img src="QGIS_trace.png" alt="QGIS hand tracing" width="520">
+   </p>
+  
 
 2. **Produce control coordinates for each coordinate system**  
    Four reference control points are selected. Their CRS coordinates are obtained from QGIS and exported as GeoJSON, while the corresponding pixel coordinates are extracted from the image using Python and OpenCV and saved as JSON.  
-   ![Control points extracted using OpenCV](control_points.png)
+   <p align="center">
+     <img src="control_points.png" alt="Control points extracted using OpenCV" width="520">
+   </p>
 
 3. **Matrix-based transformation**  
    A conversion matrix is derived to map CRS coordinates into pixel coordinates using an affine transformation. Given a set of corresponding control points in CRS space and image space, a linear system is solved to estimate the transformation parameters, including scale, translation, and axis inversion. Once computed, the same affine transformation matrix is applied uniformly to all traced line geometries, ensuring consistent CRS-to-pixel conversion without per-file recalculation. The transformed line data are then exported as JSON in pixel coordinates for downstream use.
@@ -29,7 +34,9 @@ The pipeline consists of 3 stages:
 
 The image below demonstrates the transformed line data overlaid correctly onto the original schematic:
 
-![Pixel-accurate overlay](overlay.png)
+<p align="center">
+     <img src="overlay.png" alt="Control points extracted using OpenCV" width="520">
+   </p>
 
 
 ---
