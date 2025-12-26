@@ -27,11 +27,10 @@ The pipeline consists of 3 stages:
 
 ## Final Result
 
-The image below demonstrates the transformed line data overlaid directly onto the original schematic:
+The image below demonstrates the transformed line data overlaid correctly onto the original schematic:
 
 ![Pixel-accurate overlay](overlay.png)
 
-The alignment confirms that the matrix-based conversion works as intended, preserving the geometry traced in QGIS while matching the image coordinate system accurately.
 
 ---
 
