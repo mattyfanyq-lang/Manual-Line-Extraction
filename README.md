@@ -1,10 +1,10 @@
 # Manual Line Extraction & Coordinate Conversion
 
-The objective of this project is to develop a workflow for manually tracing line data and converting it into pixel coordinates that can be accurately overlaid onto the original schematic.
+The objective of this project is to develop a workflow to manually extract lines by tracing and converting line data into pixel coordinates that can be accurately overlaid onto the original schematic.
 
-QGIS is selected as the tracing software because, while it does not directly output pixel coordinates for traced lines, its exported CRS coordinates remain anchored to the overall dimensions of the schematic. This preserves each traced line’s position relative to the entire schematic. Inkscape, on the other hand, produces vector layers whose coordinate system is constrained to the minimal bounding area of the path itself. As a result, these paths cannot be accurately mapped back to the complete schematic without additional context.
+QGIS is selected as the tracing software because, while it does not directly output pixel coordinates for traced lines, its exported CRS coordinates remain anchored relative to the overall dimensions of the schematic. Inkscape, on the other hand, produces vector layers whose coordinate system is constrained to the minimal bounding area of the path itself. As a result, these paths cannot be accurately mapped back to the complete schematic without additional context.
 
-The central challenge of this project is therefore converting QGIS-exported CRS coordinates into image pixel coordinates without losing spatial accuracy. This repository addresses that challenge by deriving and applying an affine transformation matrix to map GIS space into pixel space consistently.
+The central challenge of this project is therefore converting QGIS-exported CRS coordinates into schematic pixel coordinates without losing spatial accuracy. This repository addresses that challenge by deriving and applying an affine transformation matrix to map GIS space into pixel space consistently.
 
 ---
 
@@ -13,26 +13,25 @@ The central challenge of this project is therefore converting QGIS-exported CRS 
 The pipeline consists of 3 stages:
 
 1. **Manual tracing in QGIS**  
-   MRT lines are traced by hand over a schematic background image. The line data are represented as CRS coordinates and exported in GeoJSON format.  
+   MRT lines are traced by hand over a schematic background image. Each point along the traced line is stored using CRS coordinates and exported as GeoJSON.
      <p align="center">
      <img src="QGIS_trace.png" alt="QGIS hand tracing" width="520">
    </p>
   
 
 2. **Produce control coordinates for each coordinate system**  
-   Four reference control points are selected. Their CRS coordinates are obtained from QGIS and exported as GeoJSON, while the corresponding pixel coordinates are extracted from the image using Python and OpenCV and saved as JSON.  
+   4 common reference points are identified. Their CRS coordinates are obtained from QGIS and saved in GeoJSON, while their pixel coordinates are extracted directly from the image using Python and OpenCV. These pairs serve as anchors to relate the two coordinate systems.  
    <p align="center">
      <img src="control_points.png" alt="Control points extracted using OpenCV" width="520">
    </p>
 
 3. **Matrix-based transformation**  
-   A conversion matrix is derived to map CRS coordinates into pixel coordinates using an affine transformation. Given a set of corresponding control points in CRS space and image space, a linear system is solved to estimate the transformation parameters, including scale, translation, and axis inversion. Once computed, the same affine transformation matrix is applied uniformly to all traced line geometries, ensuring consistent CRS-to-pixel conversion without per-file recalculation. Most importantly, conversion accuracy can be improved in the future by updating this file alone. The transformed line data are then exported as JSON in pixel coordinates for downstream use. 
-
+   A conversion matrix is derived to map CRS coordinates into pixel coordinates using an affine transformation. Given a set of corresponding control points in CRS space and image space, a linear system is solved to estimate the transformation parameters(scale, translation, and axis inversion). Once derived, the same affine transformation matrix is applied to convert all CRS files in GeoJson to pixel coordinate files in Json. Any future accuracy improvements only require updating the matrix, without modifying the original GeoJSON data.
 ---
 
 ## Final Result
 
-The image below demonstrates the transformed line data overlaid correctly onto the original schematic:
+The image below illustrates the transformed line data aligned accurately with the original schematic:
 
 <p align="center">
      <img src="overlay.png" alt="Control points extracted using OpenCV" width="520">
